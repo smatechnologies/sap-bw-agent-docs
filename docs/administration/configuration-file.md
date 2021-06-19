@@ -50,7 +50,7 @@ Encrypt the Password for the SAP Account
 3. *(Optional)* Mark the **Visible** check box to make the password characters visible in the Password encryption tool.
 4. In **Password** field, enter the password.
 5. Click **Encrypt**.
-6. To copy the encrypted password, click the **Copy to Clipboard**` button.
+6. To copy the encrypted password, click the **Copy to Clipboard** button.
 7. Open the **SAPBWLSAM.ini** file.
 8. Locate **Password** under the **SAP System** settings in the SAPBWLSAM.ini file in the Text editor.
 9. Delete the default value for the Password.
