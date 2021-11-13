@@ -9,12 +9,12 @@ To the right of the OpCon Job Status in the Operation Daily List screen, the SAP
   - If the LSAM was able to start the SAP BW Process Chain before it failed, the message contains the SAP Process Chain ID.
 
 :::note
-The SAP BW LSAM returns more detailed alpha numeric error messages to the Detailed Job Messages parameter in the Job Information screen\>Configuration Tab\>Operations Related Information Tab. For additional information, refer to [Job Information](https://help.smatechnologies.com/opcon/core/latest/Files/UI/Enterprise%20Manager/Job%20Information.htm) in the **Enterprise Manager** online help.
+The SAP BW LSAM returns more detailed alpha numeric error messages to the Detailed Job Messages parameter in the Job Information screen\>Configuration Tab\>Operations Related Information Tab. For additional information, refer to [Job Information](https://help.smatechnologies.com/opcon/core/Files/UI/Enterprise-Manager/Job-Information) in the **Enterprise Manager** online help.
 :::
 
 ## SAP BW LSAM-Specific exit conditions
 
-The following is a list of SAP BW LSAM exit conditions for failed jobs. If an exit condition is not in this list, the LSAM Exit Code position of the return status is a Windows error code. For a list of Windows errors, refer to [Windows System Errors](https://help.smatechnologies.com/opcon/core/latest/Files/Concepts/Windows%20System%20Errors.htm) in the **Concepts** online help.
+The following is a list of SAP BW LSAM exit conditions for failed jobs. If an exit condition is not in this list, the LSAM Exit Code position of the return status is a Windows error code. For a list of Windows errors, refer to [Windows System Errors](https://help.smatechnologies.com/opcon/core/Files/Concepts/Windows-System-Errors) in the **Concepts** online help.
 
 ### SAP BW LSAM exit codes
 
