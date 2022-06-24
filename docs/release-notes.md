@@ -1,5 +1,17 @@
 # Release notes
 
+## SAP BW Agent 20.2.0
+
+2022 June
+
+:white_check_mark: Now prevents the agent from logging incorrect configuration information.
+
+:white_check_mark: Fixed an issue in SAPBW agent where a change in the SAP schema definition file after an SAPBW system upgrade cause run time errors when starting SAPBW jobs and required a manual delete of the old schema file before restarting agent. Now, the schema file will be automatically created by agent on startup resulting in no schema errors when starting a job.
+
+:white_check_mark: Fixed an issue in SAPBW agent where the logging component sometimes timed out waiting to gain access to the log and the agent stopped responding.
+
+:white_check_mark: Fixed an issue where an upgrade of the SAP system to version 2021+ required new versions of the libraries to connect to the system from the agent.
+
 ## SAP BW Agent 20.0.0
 
 2020 September
