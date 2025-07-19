@@ -1,5 +1,11 @@
 # Release notes
 
+## SAP BW Agent 22.1.0
+
+2025 JULY
+
+:eight_spoked_asterisk: INTPLT-614 : Enhanced the agent to ignore empty processes created in a process chain. It also handles skipped status for processes now when determining job completion.
+
 ## SAP BW Agent 20.2.0
 
 2022 June
