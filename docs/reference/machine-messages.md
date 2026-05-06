@@ -1,24 +1,52 @@
+---
+sidebar_label: 'Machine messages'
+title: Machine messages
+description: "How the SAP BW Agent reports job completion information through OpCon machine messages and the LSAM-specific exit codes."
+tags:
+  - Reference
+  - System Administrator
+  - Operations Staff
+  - Agents
+---
+
 # Machine messages
 
-To the right of the OpCon Job Status in the Operation Daily List screen, the SAP BW LSAM populates a 20-character message to communicate numeric job completion information.
+## What is it?
 
-- For jobs that are running, the SAP BW LSAM returns the SAP BW Process Chain ID. The 20 character termination description displays part of the Chain ID. The complete 25 characters Chain ID displays in the *Job Information screen\>Configuration Tab\>Operations Related Information Tab*.
-- For jobs that Finish OK, the SAP BW LSAM returns information in the following format: 0-< Partial Process Chain ID\>
-- For jobs that Failed, the SAP BW LSAM returns information in the following format: <LSAM Exit Code\> - <SAM job number or SAP Process Chain ID\>
-  - If the LSAM was unable to start the SAP BW Process Chain before it failed, the message contains the SAM job number.
-  - If the LSAM was able to start the SAP BW Process Chain before it failed, the message contains the SAP Process Chain ID.
+In the **Operation Daily List** screen, OpCon shows a 20-character message to the right of each job's status. The SAP BW Agent populates this message with information about the SAP BW process chain. This page explains the format of that message and lists the agent-specific exit codes you may see when a job fails.
+
+## Message format by job status
+
+| Job status | Message format | Notes |
+|---|---|---|
+| Running | SAP BW Process Chain ID (truncated to 20 characters) | The full 25-character Chain ID is shown on the **Job Information** screen, **Configuration** tab, **Operations Related Information** tab. |
+| Finish OK | `0-<Partial Process Chain ID>` | Leading `0` indicates success. |
+| Failed (chain did not start) | `<LSAM Exit Code> - <SAM job number>` | The agent could not start the process chain. |
+| Failed (chain started, then failed) | `<LSAM Exit Code> - <SAP Process Chain ID>` | The agent started the chain, then it failed. |
 
 :::note
-The SAP BW LSAM returns more detailed alpha numeric error messages to the Detailed Job Messages parameter in the Job Information screen\>Configuration Tab\>Operations Related Information Tab. For additional information, refer to [Job Information](https://help.smatechnologies.com/opcon/core/Files/UI/Enterprise-Manager/Job-Information) in the **Enterprise Manager** online help.
+For more detailed alphanumeric error messages, see the **Detailed Job Messages** parameter on the **Job Information** screen, **Configuration** tab, **Operations Related Information** tab. Refer to [Job Information](https://help.smatechnologies.com/opcon/core/Files/UI/Enterprise-Manager/Job-Information) in the **Enterprise Manager** online help.
 :::
 
-## SAP BW LSAM-Specific exit conditions
+## SAP BW Agent exit codes
 
-The following is a list of SAP BW LSAM exit conditions for failed jobs. If an exit condition is not in this list, the LSAM Exit Code position of the return status is a Windows error code. For a list of Windows errors, refer to [Windows System Errors](https://help.smatechnologies.com/opcon/core/Files/Concepts/Windows-System-Errors) in the **Concepts** online help.
-
-### SAP BW LSAM exit codes
+If the **LSAM Exit Code** in a failed-job message is not in the table below, it is a Windows error code. For Windows error codes, refer to [Windows System Errors](https://help.smatechnologies.com/opcon/core/Files/Concepts/Windows-System-Errors) in the **Concepts** online help.
 
 | Exit Code | Description |
-|--- | --- |
-| 70001 | Error in trying to start the BW Process Chain |
-| 70002 | Error in retrieving the log for BW Process Chain |
+|---|---|
+| `70001` | Error trying to start the BW Process Chain. |
+| `70002` | Error retrieving the log for the BW Process Chain. |
+
+## FAQs
+
+**A job failed. Where do I look first?**
+Start with the machine message in the **Operation Daily List**.
+
+- If the LSAM Exit Code is `70001` or `70002`, see the table above.
+- Otherwise, the LSAM Exit Code is a Windows error code. Refer to **Windows System Errors**.
+
+**Where do I see the full Process Chain ID?**
+The 20-character machine message only shows part of it. The full 25-character Chain ID is on the **Job Information** screen, **Configuration** tab, **Operations Related Information** tab.
+
+**Where do I see detailed alphanumeric error messages?**
+On the **Job Information** screen, **Configuration** tab, **Operations Related Information** tab, in the **Detailed Job Messages** parameter.

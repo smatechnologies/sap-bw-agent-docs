@@ -1,48 +1,85 @@
+---
+sidebar_label: 'Logging'
+title: Logging
+description: "Where the SAP BW Agent and JORS services write their logs, how archives are organized, and how log retention is controlled."
+tags:
+  - Reference
+  - System Administrator
+  - Operations Staff
+  - Agents
+---
+
 # Logging
 
-The SAP BW LSAM service writes processing information to the SAPBWLSAM.log file and writes communication information to the SAPBWLSAMTrace.log file in the default log folder. Additionally, the SAP BW LSAM service writes all configuration information to the SAPBWLSAM.log file when it starts or when it detects a change to the SAPBWLSAM.ini file.
+## What is it?
 
-The SAP BW JORS service writes processing information to the SAPBWJORS.log file in the default log folder.
+The SAP BW Agent and SAP BW JORS services produce log files that record processing, communication, and configuration events. This page covers what each log contains, where it lives, how the agent rotates and archives logs, and how to control retention.
 
-The most current log files have the names SAPBWLSAM.log, SAPBWLSAMTrace.log, and SAPBWJORS.log. The SAP BW LSAM and SAP BW JORS logs reside in the <Output Directory\>\\SAP BW LSAM\\Log\\ directory.
+## Log files at a glance
+
+| File | Written by | Contents |
+|---|---|---|
+| `SAPBWLSAM.log` | SAP BW Agent service | Processing information, plus full configuration on service start or `.ini` change. |
+| `SAPBWLSAMTrace.log` | SAP BW Agent service | Communication trace messages between the agent and SMANetCom. |
+| `SAPBWJORS.log` | SAP BW JORS service | JORS processing information. |
+
+**Default log location:** `\<Output Directory>\SAP BW LSAM\Log\`
 
 :::note
-The Output Directory was configured during the installation. For more information, refer to [File Locations](https://help.smatechnologies.com/opcon/core/file-locations) in the **Concepts** online help.
+The Output Directory is set during installation. For more information, refer to [File Locations](https://help.smatechnologies.com/opcon/core/file-locations) in the **Concepts** online help.
 :::
 
-When log files reach a user-configured maximum size, the SAP BW LSAM and SAP BW JORS services archive the log files. The <Output Directory\>\\SAP BW LSAM\\Log\\Archives\\ folder is the location of all archived log files. A folder exists in the Archives folder for each day the SAP BW LSAM and SAP BW JORS services process. The folder names use the following naming convention: yyyy_mm_dd (Weekday). The logging mechanism generates the weekday name according to the machine's Regional Settings.
+## How rotation and archiving work
+
+When a log file reaches the configured maximum size (`MaximumLogFileSize`), the agent and JORS services move it into a daily archive folder.
+
+- **Archive root:** `\<Output Directory>\SAP BW LSAM\Log\Archives\`
+- **Daily folder name:** `yyyy_mm_dd (Weekday)`. The weekday name is generated using the host's Regional Settings.
+- **Archived file name:** `LogName StartTime - StopTime.log` — for example, `SAPBWLSAM 125816 - 135800.log` for the time range 12:58:16 to 13:58:00.
 
 :::info
-If the Regional Settings are set to English, an archive folder would have the following name:
+The weekday in the folder name follows the host's Regional Settings:
 
 ```console
 2008_01_11 (Friday)
 ```
 
-If the Regional Settings are set to French, an archive folder would have the following name:
+If the Regional Settings are set to French:
 
 ```console
 2008_01_11 (Vendredi)
 ```
-
 :::
 
-As each log file fills up, the SAP BW LSAM and SAP BW JORS services move the log files into the current archive folder and renames them using the following naming convention: LogName StartTime - StopTime.log. For example, an SAP BW LSAM archive file for the time range of 12:58:16 to 13:58:00 would be SAPBWLSAM 125816 - 135800.log.
+## Retention
 
-By default, the SAP BW LSAM and SAP BW JORS services retain 10 days of Archived logs. Configure the SAPBWLSAM.ini file to adjust this setting. For information on the configuration of debug/log settings, refer to [Debug Options](../administration/configuration-file.md/#debug-options).
+By default, the agent and JORS services retain **10 days** of archived logs. Adjust this with `ArchiveDaystoKeep` in `SAPBWLSAM.ini`. For more information, refer to [Debug Options](../administration/configuration-file.md#debug-options).
 
 :::caution
-The SAP BW LSAM and SAP BW JORS services do not purge any archive folders if any files other than archived files are present.
+The agent and JORS services do not purge any archive folder that contains files other than archived logs. If you keep notes or other files in those folders, expired archives are not removed.
 :::
 
-## Additional JORS log files
+## Job-specific log files (JORS)
 
-For each job the SAP BW LSAM executes, it creates a job log and job spool file in the Job Output folder. The LSAM names the job log files with the following syntax: <SAP JOBID\>.log. The LSAM names the job spool files with the following syntax: <SAP JOBID\>.spool.
+For each job the agent runs, it creates a job log and job spool file in the `Job Output` folder.
 
-When each job completes, the LSAM immediately archives the files. The <Output Directory\>\\SAP BW LSAM\\Job Output\\Archives\\ folder is the location of all archived log files.
+- **Job log file name:** `<SAP JOBID>.log`
+- **Job spool file name:** `<SAP JOBID>.spool`
+- **Archive root:** `\<Output Directory>\SAP BW LSAM\Job Output\Archives\`
+- **Daily folder name:** `yyyy_mm_dd (Weekday)` — same convention as the agent log archives.
 
-:::note
-The Output Directory was configured during the installation. For more information, refer to [File Locations](https://help.smatechnologies.com/opcon/core/file-locations) in the **Concepts** online help.
-:::
+When each job completes, the agent immediately moves the files to the current daily archive folder.
 
-A folder exists in the Archives folder for each day the SAP BW LSAM and SAP BW JORS services process. The folder names use the following naming convention: yyyy_mm_dd (Weekday). For example, the folder name for `January 11, 2008 would be 2008_01_11 (Friday).
+## FAQs
+
+**Where are the live log files?**
+At `\<Output Directory>\SAP BW LSAM\Log\`, set during installation.
+
+**How long are archived logs kept?**
+By default, 10 days. Change this with `ArchiveDaystoKeep` in [Debug Options](../administration/configuration-file.md#debug-options).
+
+**Why aren't my old archive folders being deleted?**
+The agent only purges archive folders that contain archived log files. If a folder has any other content, the agent leaves it alone.
+
+**Why does the weekday in the archive folder name look wrong?**
+The agent uses the host's Regional Settings to generate the weekday name. Adjust the Regional Settings on the agent machine if you need a different language.

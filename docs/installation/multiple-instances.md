@@ -1,167 +1,244 @@
 ---
-sidebar_label: "Multiple instances"
+sidebar_label: 'Multiple instances'
+title: Additional SAP BW Agent instances
+description: "Install and upgrade additional SAP BW Agent instances on the same Windows machine, both through the installer and as a manual deployment."
+tags:
+  - Procedural
+  - System Administrator
+  - Installation
+  - Upgrade
+  - Agents
 ---
 
-# Additional SAP BW LSAM instances
+# Additional SAP BW Agent instances
 
-## New installation
+## What is it?
 
-If additional LSAMs are needed after installing the initial SAP BW LSAM repeat the [Install the SAP BW LSAM](new-installation.md#Install_the_SAP_BW_LSAM). The installation package will automatically transform to install new instances of the LSAM. After installing each new instance, define a new machine in OpCon with a unique name and port number using the procedure to [Machine Creation](new-installation.md#Machine).
+You can run multiple SAP BW Agent instances on a single Windows host when you need to connect to more than one SAP BW system from the same machine. This page covers two paths:
 
-## Manually install additional LSAMs to unique directories
+- **Installer-based** *(recommended)* — Run the installer again. The installer transforms automatically to install another instance.
+- **Manual deployment** — Supported for environments that already use this method. Higher maintenance overhead than the installer-based path.
 
-If you have previously installed additional LSAMs to unique directories, you can continue using this method if you desire. This causes more overhead for maintenance than the automatic method as described above; however, SMA will support this method of manual installation.
+## What must be unique across instances
 
-### Create a new directory
+Every instance on the same host requires a unique value for each of these:
 
-1. Right-click on the **Start** button on the application server.
+- `ShortServiceName`
+- `DisplayServiceName`
+- `SocketNumberToSAM`
+- `JORSSocket`
+- The OpCon machine name and the **Socket Number** in the OpCon machine record
+
+---
+
+## Installer-based: install an additional instance
+
+To install an additional agent instance using the installer, complete the following steps:
+
+1. Repeat the installation procedure in [Install the SAP BW agent](new-installation.md#machine). The installation package transforms automatically to install a new instance.
+2. Define a new machine record in OpCon with a unique name and port number. Refer to [Step 3 — Create the machine record in OpCon](new-installation.md#machine).
+
+The installer-based path is the recommended method for new deployments.
+
+---
+
+## Manual deployment
+
+If you have previously installed additional agents to unique directories, you can continue using this method. SMA supports it; however, it requires more maintenance overhead than the installer-based path.
+
+### Step 1 — Create the directory
+
+To create the directory for an additional agent, complete the following steps:
+
+1. Right-click the **Start** button on the application server.
 2. Select **Explore** from the menu.
-3. Browse to the OpConxps <Target Directory\> in the explorer window.
-4. Use menu path: **File \> New \> Folder**.
-5. Name the new *SAP BW LSAM <custom directory\>* (e.g., SAPBWLSAM14200).
-6. Browse to the OpConxps <Configuration Directory\>
-7. Use menu path: **File \> New \> Folder**.
-8. Name the new SAP BW LSAM directory the same as the new program file directory (e.g., SAPBWLSAM14200).
+3. Browse to **OpConxps \<Target Directory>** in the explorer window.
+4. Go to **File** > **New** > **Folder**.
+5. Name the folder **SAP BW LSAM \<custom directory>** (for example, `SAPBWLSAM14200`).
+6. Browse to **OpConxps \<Configuration Directory>**.
+7. Go to **File** > **New** > **Folder**.
+8. Name the new directory the same as the new program file directory (for example, `SAPBWLSAM14200`).
 
-### Copy required files
+### Step 2 — Copy required files
 
-1. Browse to the first LSAM's <Target Directory\> in the explorer window.
-2. Use menu path: **Edit \> Select All**.
-3. Use menu path: **Edit \> Copy**.
-4. Browse to the new LSAM's <Target Directory\>.
-5. Use menu path: **Edit \> Paste**.
-6. Browse to the first LSAM's <Configuration Directory\>.
-7. Use menu path: **Edit \> Select All**. Use menu path: **Edit \> Copy**.
-8. Browse to the new LSAM's <Configuration Directory\>.
-9. Use menu path: **Edit \> Paste**.
+To copy the agent files into the new directory, complete the following steps:
 
-### Modify the new LSAM's configuration file
+1. Browse to the first agent's **\<Target Directory>**.
+2. Go to **Edit** > **Select All**.
+3. Go to **Edit** > **Copy**.
+4. Browse to the new agent's **\<Target Directory>**.
+5. Go to **Edit** > **Paste**.
+6. Browse to the first agent's **\<Configuration Directory>**.
+7. Go to **Edit** > **Select All**, then go to **Edit** > **Copy**.
+8. Browse to the new agent's **\<Configuration Directory>**.
+9. Go to **Edit** > **Paste**.
 
-1. Browse to <Configuration Directory\>\\\<custom directory\>\\ in the explorer window.
+### Step 3 — Modify the new agent's configuration file
+
+To configure the new agent, complete the following steps:
+
+1. Browse to **\<Configuration Directory>\\\<custom directory>\\**.
 2. Find the **SAPBWLSAM.ini** file.
-3. Right-click the file, and select **Open With**.
-4. Select an ASCII text editor (e.g., Notepad) from the menu.
-5. In the text editor, make any necessary modifications to the configuration options. For more information about editing the  SAPBWLSAM.ini file, refer to  the [SAP BW LSAM configuration file](../administration/configuration-file.md).
-6. Define a unique **ShortServiceName** in the General Settings section.
+3. Right-click the file and select **Open With**.
+4. Select an ASCII text editor (for example, Notepad).
+5. Make any necessary modifications. For details on each setting, refer to the [SAP BW Agent configuration file](../administration/configuration-file.md).
+6. Define a unique **ShortServiceName** in the **General Settings** section.
 7. Define a unique **DisplayServiceName**.
-8. Define a unique **SocketNumberToSAM** in the TCP/IP Parameters section.
-9. Define a unique **JORSSocket** in the JORS Settings section.
-10. Configure the connection information for the SAP BW System. For more information, refer to [SAP System Settings](../administration/configuration-file.md#sap-system-settings).
-11. Use menu path: **File \> Save**.
-12. **Close ☒** the **Explorer** window.
+8. Define a unique **SocketNumberToSAM** in the **TCP/IP Parameters** section.
+9. Define a unique **JORSSocket** in the **JORS Settings** section.
+10. Configure the connection information for the SAP BW system. Refer to [SAP System Settings](../administration/configuration-file.md#sap-system-settings).
+11. Go to **File** > **Save**.
+12. Close the editor.
 
-### Register the new LSAM as a service and start
+### Step 4 — Register and start the new service
 
-1. Click **Start**.
-2. Enter **cmd** in the search box to open a command window.
-3. Change the directory to the new LSAM's directory in the Command window.
-4. Enter the following command: **regsvc.cmd -install**.
-5. **Close ☒** the command window.
-6. Use menu path: **Start \> Administrative Tools \> Server Manager**.
-7. Expand (+) the **Configuration** option in the Administrative Tools window.
-8. Click the **Services** icon.
-9. In the **Services** list, select the New Display Service Name for the LSAM.
-10. Use menu path: **Action \> Start**.
-11. Confirm the *Service's* **Status** is **Started**.
+To register the new agent as a Windows service and start it, complete the following steps:
 
-### Create the Machine in OpCon
+1. Select **Start**.
+2. Enter `cmd` in the search field to open a command window.
+3. Change the directory to the new agent's directory.
+4. Enter the following command:
 
-When an SAP BW LSAM is installed, create a machine record with a unique Machine name and Socket number in OpCon. If the machine was previously defined in OpCon, you may skip this procedure.
+    ```console
+    regsvc.cmd -install
+    ```
 
-1. Use menu path: **Start \> Programs \> OpConxps \> Enterprise Manager**. The **OpCon Login** screen displays.
-2. In the **Username** text box, enter a *case-sensitive User Login ID* (e.g., ocadm).
-3. In the **Password** text box, enter the *case-sensitive password* for the user.
-4. In the **Profile** drop-down list, select the *Profile*.
-5. Click the **Login** button to log in to the Enterprise Manager.
-6. Double-click on **Machines** in the **Navigation** panel under **Administration**.
-7. Click the **Add** button on the Machines toolbar in the **Machines** screen.
-8. In the **Name** text box, enter the Official Host Name or Alias based on the LSAM machine.
-9. In the **Documentation** text box, enter any relevant documentation for this LSAM machine.
-10. In the **Machine Type** drop-down list, select **SAP BW**.
-11. In the **Socket Number** box, set the value to a *unique number* (e.g., 14200).
-12. *(Optional)* In the **IP Address** field, enter the *IPv4* or *IPv6 address*.
-13. *(Optional)* In the **Fully Qualified Domain Name** field, enter the *name*.
-14. Click **Save** button on the **Machines** toolbar.
-15. Click **Open Advanced Settings Panel** under the **Advanced Settings**. The **Advanced Machine Properties** window displays.
-16. Click the **SAP BW Settings** tab.
-17. Configure the **Client ID** as the SAP BW Client ID for the SAPQueryProcessor to connect to the SAP System.
-18. Click **Update**.
-19. Configure the **Gateway** with the full connection string for the SAPQueryProcessor to connect to the SAP system.
-20. Click **Update**.
-21. Configure the **System Number** as the system number for the SAPQueryProcessor to connect to the SAP system.
-22. Click **Update**.
-23. *(Optional)* Configure the **RFC Trace** to On if the SAP RFC trace for the SAPQueryProcessor message requests should be turned on.
-24. Click **Update**.
-25. Click **Save**.
-26. *(Optional)* To start communication with the machine, right-click over the graphic to enable the menu in the **Communication Status** frame.
-27. Click on the **x** to the right of the **Machines** tab to close the Machines screen.
+5. Close the command window.
+6. Go to **Start** > **Administrative Tools** > **Server Manager**.
+7. Expand (+) the **Configuration** option.
+8. Select **Services**.
+9. In the **Services** list, select the new Display Service Name for the agent.
+10. Go to **Action** > **Start**.
+11. Confirm the service's **Status** is **Started**.
 
-## Upgrade installation
+### Step 5 — Create the machine record in OpCon
 
-If you installed multiple instances of the SAP BW LSAM from a
-distribution prior to 15.0, complete the [Upgrade Installation](upgrade-installation.md) instructions
-for each instance of the LSAM. The installation package will
-automatically transform to install new instances of the LSAM.
+When an SAP BW Agent is installed, create a machine record with a unique machine name and socket number in OpCon. If the machine was previously defined in OpCon, you may skip this step.
 
-## Manually upgrade an additional LSAM
+To create the machine record, complete the following steps:
 
-A manual upgrade is a requirement for each additional LSAM that was manually installed to a unique directory. After upgrading the first SAP BW LSAM from the DVD installation, complete the steps in this section for each additional LSAM.
+1. Go to **Start** > **Programs** > **OpConxps** > **Enterprise Manager**. The **OpCon Login** screen displays.
+2. In the **Username** field, enter a *case-sensitive User Login ID* (for example, `ocadm`).
+3. In the **Password** field, enter the *case-sensitive password*.
+4. In the **Profile** list, select the *profile*.
+5. Select the **Login** button.
+6. In the Navigation Panel, under **Administration**, select **Machines**.
+7. Select the **Add** button on the **Machines** toolbar.
+8. In the **Name** field, enter the *official host name or alias*.
+9. In the **Documentation** field, enter any relevant documentation.
+10. In the **Machine Type** list, select **SAP BW**.
+11. In the **Socket Number** field, set the value to a unique number (for example, `14200`).
+12. (Optional) In the **IP Address** field, enter the *IPv4* or *IPv6 address*.
+13. (Optional) In the **Fully Qualified Domain Name** field, enter the *FQDN*.
+14. Select the **Save** button.
+15. Select **Open Advanced Settings Panel** under **Advanced Settings**. The **Advanced Machine Properties** window displays.
+16. Select the **SAP BW Settings** tab.
+17. Configure the **Client ID** for the SAPQueryProcessor connection.
+18. Select **Update**.
+19. Configure the **Gateway** with the full connection string for the SAPQueryProcessor.
+20. Select **Update**.
+21. Configure the **System Number** for the SAPQueryProcessor connection.
+22. Select **Update**.
+23. (Optional) Set **RFC Trace** to On if SAP RFC tracing for the SAPQueryProcessor messages should be enabled.
+24. Select **Update**.
+25. Select **Save**. The machine record is saved.
+26. (Optional) To start communication with the machine, right-click the graphic in the **Communication Status** frame.
+27. Select the **x** to the right of the **Machines** tab to close the **Machines** screen.
 
-### Check for running Jobs
+---
 
-1. Double-click on **Machines Status** under the **Operation** topic. The **Machines Status** screen displays.
+## Upgrade additional instances
+
+### Installer-based upgrade
+
+If you installed multiple instances from a distribution prior to 15.0, complete the [Upgrade installation](upgrade-installation.md) procedure for each instance. The installation package transforms automatically.
+
+### Manual upgrade of an additional instance
+
+A manual upgrade is required for each additional agent that was manually installed to a unique directory. After upgrading the first SAP BW Agent from the DVD installation, complete the steps in this section for each additional agent.
+
+#### Check for running jobs
+
+To confirm there are no running jobs before the manual upgrade, complete the following steps:
+
+1. In the Navigation Panel, under **Operation**, select **Machines Status**.
 2. Confirm the number of running jobs is **0** for the SAP BW machine.
-3. If running jobs exists, contact the OpCon administrator if you should:
+3. If running jobs exist, contact the OpCon administrator to determine whether to:
    - Wait for the processes to end **- or -**
-   - **Kill** the processes on the SAP BW side. For more information, refer to [Kill Command](../advanced-features/kill-command.md).
-4. Repeat step 3 until the **Machines Status** screen indicates **Running Jobs** of **0/<max\>**.
+   - Kill the processes on the SAP BW side. Refer to [Kill command](../advanced-features/kill-command.md).
+4. Repeat step 3 until **Running Jobs** shows **0/\<max>**.
 5. Right-click the machine and select **Stop Communication** from the menu.
 
-### Stop the service
+#### Stop the additional service
 
-1. Use the following menu path on the Application server: **Start \> Administrative Tools \> Server Manager**. The **Administrative Tools** window displays.
+To stop the agent service for an additional instance, complete the following steps:
+
+1. On the application server, go to **Start** > **Administrative Tools** > **Server Manager**.
 2. Expand (**+**) the **Configuration** option.
-3. Click the **Services** icon. The **Services** window displays.
-4. In the **Services** list, select the Additional Display Service Name for the LSAM.
-5. Use menu path: **Action \> Stop**.
-6. Confirm the *Service\'s* **Status** is **Stopped**.
+3. Select the **Services** button.
+4. In the **Services** list, select the additional Display Service Name for the agent.
+5. Go to **Action** > **Stop**.
+6. Confirm the service's **Status** is **Stopped**.
 
-### Stop the JORS service
+#### Stop the JORS service
 
-1. In the **Services** list, select the JORS Service.
-2. Use menu path: **Action \> Stop**.
-3. Confirm the *Service's* **Status** is **Stopped**.
+To stop the JORS service for an additional instance, complete the following steps:
+
+1. In the **Services** list, select the JORS service.
+2. Go to **Action** > **Stop**.
+3. Confirm the service's **Status** is **Stopped**.
 4. Close the **Services** window.
-5. Repeat this procedure for each instance of the LSAM on the machine.
+5. Repeat this procedure for each instance of the agent on the machine.
 
 #### Copy upgrade files
 
-1. Browse to the first SAP BW LSAM's directory in the explorer window.
-2. Use menu path: **Edit \> Select All**. Use menu path: **Edit \> Copy**.
-3. Browse to the additional SAP BW LSAM directory.
-4. Use menu path: **Edit \> Paste**.
+To copy the upgrade files into the additional agent directory, complete the following steps:
 
-### Confirm the additional LSAM's configuration settings
+1. Browse to the first SAP BW Agent's directory.
+2. Go to **Edit** > **Select All**, then **Edit** > **Copy**.
+3. Browse to the additional SAP BW Agent directory.
+4. Go to **Edit** > **Paste**.
 
-1. Browse to <Configuration Directory\>\\**SAP BW LSAM**\\ in the explorer window.
+#### Confirm the configuration settings
+
+To merge configuration changes into the additional agent, complete the following steps:
+
+1. Browse to **\<Configuration Directory>\\SAP BW LSAM\\**.
 2. Find the **SAPBWLSAM.ini** file.
-3. Right-click the file, and select **Open With**.
-4. Select an ASCII text editor (e.g., Notepad) from the menu.
-5. Find the **NewSAPBWLSAM.ini** file in the first SAP BW LSAM's <Configuration Directory\> in the additional LSAM directory.
-6. Right-click the file, and select **Open With**.
-7. Select an ASCII text editor (e.g., Notepad) from the menu.
-8. In the text editor, compare the NewSAPBWLSAM.ini file with the SAPBWLSAM.ini file so you can copy any new settings into from the new version of the LSAM to your existing SAPBWLSAM.ini file. Make any necessary modifications to the configuration options. For more information about editing the SAPBWLSAM.ini file, refer to the [SAP BW LSAM configuration file](../administration/configuration-file.md).
+3. Right-click the file and select **Open With**.
+4. Select an ASCII text editor (for example, Notepad).
+5. Find the **NewSAPBWLSAM.ini** file in the additional agent directory's **\<Configuration Directory>**.
+6. Right-click the file and select **Open With**.
+7. Select an ASCII text editor.
+8. Compare the **NewSAPBWLSAM.ini** with **SAPBWLSAM.ini**. Copy any new settings from the new version into your existing file. Refer to the [SAP BW Agent configuration file](../administration/configuration-file.md) for setting details.
 
-### Restart the service
+#### Restart the service
 
-1. Use the following menu path on the Application server: **Start \> Administrative Tools \> Server Manager**. The **Administrative Tools** window displays.
+To restart the agent service for an additional instance, complete the following steps:
+
+1. On the application server, go to **Start** > **Administrative Tools** > **Server Manager**.
 2. Expand (**+**) the **Configuration** option.
-3. Click the **Services** icon. The **Services** window displays.
-4. In the **Services** list, select the New Display Service Name for the LSAM.
-5. Use menu path: **Action \> Start**.
-6. Confirm the *Service's* **Status** is **Started**.
+3. Select the **Services** button.
+4. In the **Services** list, select the new Display Service Name for the agent.
+5. Go to **Action** > **Start**.
+6. Confirm the service's **Status** is **Started**.
 
-### Start communication with the LSAM
+#### Start communication with the agent
 
-1. Double-click on **Machines Status** under the **Operation** topic. The **Machines Status** screen displays.
-2. Right-click the machine and select **Start Communication** from the menu.
+To restart communication with the agent, complete the following steps:
+
+1. In the Navigation Panel, under **Operation**, select **Machines Status**.
+2. Right-click the machine and select **Start Communication** from the menu. Communication with the agent resumes.
+
+---
+
+## FAQs
+
+**Why would I run more than one SAP BW Agent on the same machine?**
+To connect to more than one SAP BW system, or to isolate workloads from different SAP environments on a shared host.
+
+**Should I use the installer or the manual approach?**
+Use the installer for new deployments. The manual approach is supported for environments that already use it but adds maintenance overhead.
+
+**Which fields must be unique across instances?**
+`ShortServiceName`, `DisplayServiceName`, `SocketNumberToSAM`, `JORSSocket`, and the OpCon machine name and socket number.
