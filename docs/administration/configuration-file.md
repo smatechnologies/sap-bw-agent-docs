@@ -91,9 +91,10 @@ The tables below document each section of `SAPBWLSAM.ini`.
 |---|---|---|---|---|
 | `DisplayServiceName` | `SMA OpCon Agent for SAP BW` | N | Y | The service name displayed in the Service Control Manager. Must be unique for each SAP BW Agent on the same host. |
 | `ShortServiceName` | `SMA_SAPBWLSAM` | N | Y | The hidden, internal (registry) service name Windows refers to. Must be unique for each SAP BW Agent on the same host. |
-| `MaximumNumberOfJobs` | `10` | N | Y | Maximum number of jobs the agent can manage concurrently. Maximum allowed is 500; typical customer usage is 10–30. Setting to 0 prevents any job processing. Consider the host's CPU and memory when sizing this value. |
-| `JobStatusCheckInterval` | `30` | N | Y | Interval in seconds at which the agent polls the SAP system for each job's status. Supported values: 5–300. |
-| `CaptureOutputBeforeJobFin` | `FALSE` | Y | N | If **TRUE**, the agent retrieves all job logs and spool listings before marking the job as finished in OpCon. If **FALSE**, the agent captures job output after the job is marked finished. |
+| `MaximumNumberOfJobs` | `10` | Y | Y | Maximum number of jobs the agent can manage concurrently. Maximum allowed is 500; typical customer usage is 10–30. Setting to 0 prevents any job processing. Consider the host's CPU and memory when sizing this value. When the value changes, the agent sends the new limit to OpCon. |
+| `JobStatusCheckInterval` | `30` | Y | Y | Interval in seconds at which the agent polls the SAP system for each job's status. Supported values: 5–300. The agent does not enforce the range. |
+| `CaptureOutputBeforeJobFin` | `FALSE` | Y | N | If **TRUE**, the agent retrieves the process chain log before marking the job as finished in OpCon. If **FALSE**, the agent captures job output after the job is marked finished. |
+| `BapiResponseTimeout` | `300` | Y | N | Seconds to wait for any call into the SAP system. If the call does not respond within this time, the connection is treated as dead and a new connection is attempted. Valid range: 30–600; a value outside the range or not a number reverts to 300. Not in the shipped file. |
 
 ### TCP/IP Parameters
 
@@ -105,7 +106,7 @@ Enter all alphabetic TCP/IP parameter values in **uppercase**. The SAP BW Agent 
 |---|---|---|---|---|
 | `SocketNumberToSAM` | `14100` | N | Y | The socket through which the agent and SMANetCom communicate. Must match the machine's socket number defined in OpCon Enterprise Manager. Must be unique across SAP BW Agents on the same host. For an up-to-date list of unused ports, refer to the Internet Assigned Numbers Authority at www.iana.org. |
 | `QueryListenerPort` | `14101` | N | N | Port on which the SAP BW Agent listens for proxy requests. Firewall settings must allow inbound connections on this port. |
-| `AllowedIPAddress_1` | `ANY` | Y | N | Restricts which TCP/IP addresses can communicate with the agent. **ANY** allows any source address. Setting a specific address (for example, `126.40.90.231`) restricts communication to that address. The agent rejects connections from any other address. Case-sensitive. |
+| `AllowedIPAddress_1` | `ANY` | Y | N | Restricts which TCP/IP addresses can communicate with the agent. **ANY** allows any source address. Setting a specific address (for example, `192.0.2.10`) restricts communication to that address. The agent rejects connections from any other address. Case-sensitive. |
 | `AllowedIPAddress_2` |  | Y | N | Same behavior as `AllowedIPAddress_1`. |
 | `AllowedIPAddress_3` |  | Y | N | Same behavior as `AllowedIPAddress_1`. |
 | `AllowedIPAddress_4` |  | Y | N | Same behavior as `AllowedIPAddress_1`. |
@@ -120,8 +121,8 @@ Enter all alphabetic debug option parameter values in **uppercase**. The SAP BW 
 | Setting | Default | Dynamic | Required | Description |
 |---|---|---|---|---|
 | `MaximumLogFileSize` | `150000` | Y | N | Maximum size in bytes for each agent log file before it is rotated and archived. Site-specific. |
-| `ArchiveDaystoKeep` | `10` | Y | N | Number of archive folders to retain. The agent checks for expired archive folders each time it archives a log. |
-| `TraceSAMMessages` | `ON` | N | N | Trace messages exchanged with SMANetCom. **ON** writes traces to `SAPLSAMTrace.log`. **OFF** disables tracing. |
+| `ArchiveDaysToKeep` | `10` | Y | N | Number of archive folders to retain. The agent checks for expired archive folders each time it archives a log. |
+| `TraceSAMMessages` | `ON` | N | N | Trace messages exchanged with SMANetCom. **ON** writes traces to `SAPBWLSAMTrace.log`. **OFF** disables tracing. |
 | `TraceLevel` | `0` | Y | N | Verbosity of agent debug messages in `SAPBWLSAM.log`. **0** = failure messages only. **1** = additional debug messages. **2** = detailed debug messages. |
 
 ### Process Options
@@ -137,7 +138,7 @@ Enter all alphabetic debug option parameter values in **uppercase**. The SAP BW 
 
 | Setting | Default | Dynamic | Required | Description |
 |---|---|---|---|---|
-| `CaptureJobOutput` | `TRUE` | Y | N | **TRUE** writes each job's output to a unique file in the `MSLSAM\JobOutput` subdirectory using the syntax `<OpCon job name up to 12 chars>_<unique number>.TXT`. The View Job Output feature only works when this is **TRUE**. |
+| `CaptureJobOutput` | `TRUE` | Y | N | **TRUE** writes each job's output to a file named `<process chain name>#<log ID>.log` in the `JobOutput` folder beside the agent's `Log` folder, and archives it when the job ends. The View Job Output feature only works when this is **TRUE**. |
 
 ### SAP System Settings {#sap-system-settings}
 

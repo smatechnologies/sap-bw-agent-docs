@@ -19,10 +19,11 @@ In the **Operation Daily List** screen, OpCon shows a 20-character message to th
 
 | Job status | Message format | Notes |
 |---|---|---|
-| Running | SAP BW Process Chain ID (truncated to 20 characters) | The full 25-character Chain ID is shown on the **Job Information** screen, **Configuration** tab, **Operations Related Information** tab. |
-| Finish OK | `0-<Partial Process Chain ID>` | Leading `0` indicates success. |
-| Failed (chain did not start) | `<LSAM Exit Code> - <SAM job number>` | The agent could not start the process chain. |
-| Failed (chain started, then failed) | `<LSAM Exit Code> - <SAP Process Chain ID>` | The agent started the chain, then it failed. |
+| Starting | `Start Process Chain` | The agent is starting the process chain. |
+| Running | `<log ID>:<chain status>` | The first 11 characters of the process chain log ID, then the chain's status, for example `Active`. The full 25-character Chain ID is shown on the **Job Information** screen, **Configuration** tab, **Operations Related Information** tab. |
+| Finish OK | `0 - <log ID>` | The process chain finished successfully. |
+| Failed (chain ended in error) | `1 - <log ID>` | The process chain ended with a status other than successful. Check the chain's log in SAP BW. |
+| Failed (agent error) | `<first 9 characters of the error>-<log ID>` | The agent could not complete an operation. The message starts with an agent exit code from the table below, or with the start of the SAP error text. If the chain did not start, no log ID follows the hyphen. |
 
 :::note
 For more detailed alphanumeric error messages, see the **Detailed Job Messages** parameter on the **Job Information** screen, **Configuration** tab, **Operations Related Information** tab. Refer to [Job Information](https://help.smatechnologies.com/opcon/core/Files/UI/Enterprise-Manager/Job-Information) in the **Enterprise Manager** online help.
@@ -30,20 +31,24 @@ For more detailed alphanumeric error messages, see the **Detailed Job Messages**
 
 ## SAP BW Agent exit codes
 
-If the **LSAM Exit Code** in a failed-job message is not in the table below, it is a Windows error code. For Windows error codes, refer to [Windows System Errors](https://help.smatechnologies.com/opcon/core/Files/Concepts/Windows-System-Errors) in the **Concepts** online help.
+These codes can appear at the start of a failed-job message, followed by `:` and further detail — for example, `70001:01`.
 
 | Exit Code | Description |
 |---|---|
-| `70001` | Error trying to start the BW Process Chain. |
-| `70002` | Error retrieving the log for the BW Process Chain. |
+| `70001` | Error trying to start or restart the BW Process Chain, including when the agent is not connected to SAP. |
+| `70004` | Error checking the process chain's status because the agent is not connected to SAP. |
+| `70008` | The SAP system did not respond. |
+
+A failed-job message that does not start with one of these codes starts with the SAP error text. See the **Detailed Job Messages** parameter for the full text.
 
 ## FAQs
 
 **A job failed. Where do I look first?**
 Start with the machine message in the **Operation Daily List**.
 
-- If the LSAM Exit Code is `70001` or `70002`, see the table above.
-- Otherwise, the LSAM Exit Code is a Windows error code. Refer to **Windows System Errors**.
+- If the message is `1 - <log ID>`, the process chain ended in error in SAP BW. Check the chain's log in SAP BW.
+- If the message starts with `70001`, `70004`, or `70008`, see the table above.
+- Otherwise, the message starts with SAP error text. See the **Detailed Job Messages** parameter for the full text.
 
 **Where do I see the full Process Chain ID?**
 The 20-character machine message only shows part of it. The full 25-character Chain ID is on the **Job Information** screen, **Configuration** tab, **Operations Related Information** tab.

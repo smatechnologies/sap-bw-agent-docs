@@ -26,6 +26,7 @@ Every instance on the same host requires a unique value for each of these:
 - `ShortServiceName`
 - `DisplayServiceName`
 - `SocketNumberToSAM`
+- `QueryListenerPort`
 - `JORSSocket`
 - The OpCon machine name and the **Socket Number** in the OpCon machine record
 
@@ -35,7 +36,9 @@ Every instance on the same host requires a unique value for each of these:
 
 To install an additional agent instance using the installer, complete the following steps:
 
-1. Repeat the installation procedure in [Install the SAP BW agent](new-installation.md#machine). The installation package transforms automatically to install a new instance.
+1. Repeat the installation procedure in [Step 1 — Install the agent](new-installation.md#step-1--install-the-agent). The installation package transforms automatically to install a new instance.
+
+   If you keep the default ports, the installer adds 100 × the instance number to all three — for example, `14200`, `14201`, and `14210` for instance 1. It registers each additional instance's services as `SMA_SAPBWLSAM<n>` and `SMA_SAPBWJORS<n>`, where `<n>` is the instance number.
 2. Define a new machine record in OpCon with a unique name and port number. Refer to [Step 3 — Create the machine record in OpCon](new-installation.md#machine).
 
 The installer-based path is the recommended method for new deployments.

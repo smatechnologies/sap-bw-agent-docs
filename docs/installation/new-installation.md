@@ -57,7 +57,7 @@ To install the SAP BW Agent on a Windows system, complete the following steps:
 21. Select **Finish** on the **InstallShield Wizard Completed** screen. The agent is installed.
 
 :::note
-The installation writes the log file `SMA_OpCon_SAP_BW_LSAM_Install.log` to the Windows directory. Consult this file if you suspect installation problems.
+The installation writes the log file `SMA_OpCon_SAPBW_LSAM_Install.log` to the Windows directory. Consult this file if you suspect installation problems.
 :::
 
 ---
@@ -75,7 +75,7 @@ To change the service startup settings, complete the following steps:
 1. On the application server, go to **Start** > **Control Panel** > **Administrative Tools**.
 2. Select the **Administrative Tools** button. The **Administrative Tools** window displays.
 3. Select the **Services** button. The **Services** window displays.
-4. Select the **SMA OpCon Agent for SAP BW** service. The **SMA OpCon Agent for SAP BW Properties** dialog displays with the **General** tab in focus.
+4. Select the **SMA OpCon Agent for SAP BW** service. The **SMA OpCon Agent for SAP BW Properties** window displays with the **General** tab in focus.
 5. Select one of the following **Startup type** values:
     - **Automatic (Delayed Start)** *(recommended)*
     - **Automatic**
@@ -133,7 +133,7 @@ The agent is now installed and registered with OpCon. SAP BW jobs can be added t
 Yes. The installer must be run by a Local Administrator on the Windows machine.
 
 **Where does the installer put its log file?**
-At `SMA_OpCon_SAP_BW_LSAM_Install.log` in the Windows directory.
+At `SMA_OpCon_SAPBW_LSAM_Install.log` in the Windows directory.
 
 **What if I am installing more than one instance on the same machine?**
 Use a unique instance name during installation, and configure unique values for `SocketNumberToSAM` and `JORSSocket` in the agent configuration file. Refer to [Multiple instances](multiple-instances.md).
