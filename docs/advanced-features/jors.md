@@ -1,7 +1,7 @@
 ---
 sidebar_label: 'JORS'
 title: Job Output Retrieval System
-description: "Configure JORS so that SAP BW job output (job logs and spool listings) can be viewed from the OpCon Enterprise Manager."
+description: "Configure JORS so that SAP BW job output (process chain logs) can be viewed from the OpCon Enterprise Manager."
 tags:
   - Procedural
   - System Administrator
@@ -13,7 +13,7 @@ tags:
 
 ## What is it?
 
-The Job Output Retrieval System (JORS) lets users view SAP BW job output — job logs and spool listings — from the OpCon Enterprise Manager (EM). To activate JORS, configure both the agent and the EM.
+The Job Output Retrieval System (JORS) lets users view SAP BW job output — the process chain log the agent captures — from the OpCon Enterprise Manager (EM). JORS serves the archived log files, so a job's output is available once the job has ended. To activate JORS, configure both the agent and the EM.
 
 **Critical setting:** The **JORS Port Number** in the EM must match the `JORSSocket` value in the agent's `SAPBWLSAM.ini`. If these values do not match, the EM cannot connect to the agent for job output.
 

@@ -19,7 +19,7 @@ This section covers optional SAP BW Agent capabilities used beyond a basic insta
 ## When would you use this section?
 
 - When a process chain failed partway through and you only want to re-run from the failed step.
-- When operations staff need to view SAP BW job logs and spool listings from the Enterprise Manager.
+- When operations staff need to view SAP BW process chain logs from the Enterprise Manager.
 - When you need to understand log file locations, naming conventions, and retention.
 - When a Windows process related to an SAP BW job will not stop through normal means.
 - When an external program needs to deliver OpCon events through a file drop instead of an API call.
