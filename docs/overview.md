@@ -21,7 +21,7 @@ The SAP BW Agent is an OpCon agent that schedules SAP BW process chains from an 
 ## When would you use it?
 
 - You need to start SAP BW process chains from an OpCon schedule and wait for them to finish before downstream jobs run.
-- You want SAP BW job output — job logs and spool listings — available in the OpCon Enterprise Manager.
+- You want SAP BW job output — process chain logs — available in the OpCon Enterprise Manager.
 - You need to coordinate SAP BW work with non-SAP jobs (file transfers, scripts, database tasks) in one dependency graph.
 
 ## Why would you use it?
@@ -48,4 +48,4 @@ The SAP BW Agent is an OpCon agent that schedules SAP BW process chains from an 
 >
 > **Process chain** — An SAP BW construct that defines a sequence of processes within an SAP BW system. The SAP BW Agent starts and monitors process chains as OpCon jobs.
 >
-> **JORS** — Job Output Retrieval System. Component that lets the OpCon Enterprise Manager view SAP BW job logs and spool listings.
+> **JORS** — Job Output Retrieval System. Component that lets the OpCon Enterprise Manager view SAP BW process chain logs.

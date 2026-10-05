@@ -86,8 +86,8 @@ To delete the tracking files, complete the following steps:
 1. Right-click the **Start** button.
 2. Select **Explore** from the menu.
 3. Browse to the agent's directory.
-4. Within the agent's directory, browse to **\<Output Directory>\\SAP BW LSAM\\Log\\**.
-5. While holding the **Ctrl** key, select the **SAPBW.TRK**, **QMsgToSAM.TRK**, and **QMsgFromSAM.TRK** files.
+4. Within the agent's directory, browse to **\<Configuration Directory>\\SAP BW LSAM\\Tracking\\**.
+5. While holding the **Ctrl** key, select the **SAPBWLSAM.TRK**, **QMsgToSAM.TRK**, and **QMsgFromSAM.TRK** files.
 6. Go to **File** > **Delete**.
 7. Select the **OK** button to confirm. The tracking files are removed.
 8. Close the **Explorer** window.
@@ -151,7 +151,7 @@ To install the SAP BW Agent, complete the following steps:
 23. (Optional) Reconfigure the service **Log on as** settings to match your previous configuration.
 
 :::note
-The installation writes `SMA_OpCon_SAP_BW_LSAM_Install.log` to the Windows directory. Consult this file if you suspect installation problems.
+The installation writes `SMA_OpCon_SAPBW_LSAM_Install.log` to the Windows directory. Consult this file if you suspect installation problems.
 :::
 
 ## Delete the old SAP BW agent directory
@@ -200,4 +200,4 @@ The SAP BW proxy functionality moved from the OpCon server to the agent. Custome
 Yes. Install the 64-bit version to a new location and the 32-bit installation is not affected. To upgrade in place, uninstall the 32-bit version first.
 
 **Do I need to delete the tracking files?**
-Yes. Removing `SAPBW.TRK`, `QMsgToSAM.TRK`, and `QMsgFromSAM.TRK` ensures the upgraded agent does not pick up stale state from the previous installation.
+Yes. Removing `SAPBWLSAM.TRK`, `QMsgToSAM.TRK`, and `QMsgFromSAM.TRK` ensures the upgraded agent does not pick up stale state from the previous installation.

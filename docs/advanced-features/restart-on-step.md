@@ -30,7 +30,7 @@ To resume a failed process chain at the failed step, complete the following step
 2. Select **Restart On Step**. A pop-up displays the Chain ID of the previously run BW chain that failed.
 3. Select the Chain ID.
 4. Select the **Restart On Step** button. The chain restarts at the point of failure.
-5. Wait for the usual job status updates until the job finishes and the JobLog and Spool List are retrieved.
+5. Wait for the usual job status updates until the job finishes and the process chain log is retrieved.
 
 :::note
 To re-run the chain from the beginning instead, select **Restart** rather than **Restart On Step** when you right-click.
