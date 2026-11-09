@@ -15,6 +15,22 @@ This page lists changes for each SAP BW Agent release. Each entry is prefixed wi
 - :eight_spoked_asterisk: — New feature or enhancement
 - :white_check_mark: — Bug fix
 
+## 23
+
+### 23.0.0
+
+2026 November
+
+### What's new
+
+:eight_spoked_asterisk: **OCAG-1204**: Added automatic TLS certificate management for the SAP BW Agent, so certificates are requested, installed, and renewed automatically without manual intervention.
+
+:eight_spoked_asterisk: **OCAG-1251**: Updated the SAP BW Agent to run on a modern .NET runtime and combined its separate background transfer process into a single service.
+
+:eight_spoked_asterisk: **OCAG-1327**: Added the ability to remotely upgrade the SAP BW Agent directly from Solution Manager, without needing to run the installer manually on the agent machine.
+
+:white_check_mark: **OCAG-1564**: Fixed an issue where the SAP BW Agent slowed down under heavy load when OpCon sent status requests for jobs that had already finished, which could leave new jobs stuck in Still Attempting Start. The agent now answers these requests without delay.
+
 ## 22
 
 ### 22.1.0
